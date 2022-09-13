@@ -4,7 +4,3 @@ grade:
     - /^submits/.*$/
   script:
     - cd /opt/shad && PYTHONPATH=grader python3 -m grader
-  artifacts:
-    when: on_failure
-    paths:
-      - artifacts/
