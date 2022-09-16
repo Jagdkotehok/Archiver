@@ -1,3 +1,20 @@
+- group:    02-homework-two
+  start:    17-09-2022 00:00
+  deadline: 26-09-2022 23:59
+  tasks:
+    - task: admission
+      score: 100
+    - task: scorer
+      score: 100
+    - task: search
+      score: 200
+    - task: tests_checking
+      score: 100
+    - task: unixpath
+      score: 100
+    - task: word2vec
+      score: 100
+
 - group:    01-homework-one
   start:    09-09-2022 00:00
   deadline: 19-09-2022 23:59
@@ -13,7 +30,7 @@
 
 - group:    00-setup
   start:    06-09-2022 00:00
-  deadline: 13-09-2022 23:59
+  deadline: 23-10-2022 23:59
   tasks:
     - task: multiplication
       score: 100
