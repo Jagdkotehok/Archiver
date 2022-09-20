@@ -24,7 +24,7 @@ check-solutions-clang-11:
 deploy:
   tags:
   - docker
-  stage: release
+  stage: test
   script:
   - docker pull cr.yandex/crpkun66rq02t8mpkpa4/cpp-course-build
   - docker build -f testenv.docker -t cr.yandex/crpkun66rq02t8mpkpa4/cpp-course-beta .
