@@ -1,6 +1,6 @@
 #include "admission.h"
 
-bool operator < (const Date& l, const Date& r) {
+bool operator<(const Date& l, const Date& r) {
     return std::tie(l.year, l.month, l.day) < std::tie(r.year, r.month, r.day);
 }
 
@@ -9,7 +9,7 @@ AdmissionTable FillUniversities(const std::vector<University>& universities, con
     for (const Applicant& applicant : applicants) {
         applicants_pointers.emplace_back(&applicant);
     }
-    std::sort(applicants_pointers.begin(), applicants_pointers.end(), [&](const Applicant* l, const Applicant* r){
+    std::sort(applicants_pointers.begin(), applicants_pointers.end(), [&](const Applicant* l, const Applicant* r) {
         if (l->points != r->points) {
             return l->points > r->points;
         } else {
@@ -17,7 +17,7 @@ AdmissionTable FillUniversities(const std::vector<University>& universities, con
         }
     });
     std::unordered_map<std::string, size_t> university_students_left;
-    for (const University& university : universities)  {
+    for (const University& university : universities) {
         university_students_left[university.name] = university.max_students;
     }
     AdmissionTable admission_table = {};
