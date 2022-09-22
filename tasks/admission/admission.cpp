@@ -23,9 +23,9 @@ AdmissionTable FillUniversities(const std::vector<University>& universities, con
     AdmissionTable admission_table = {};
     for (const Applicant* applicant : applicants_pointers) {
         for (const std::string& university : applicant->wish_list) {
-            size_t& unused_places = university_students_left[university];
-            if (unused_places > 0) {
-                --unused_places;
+            size_t& free_places = university_students_left[university];
+            if (free_places > 0) {
+                --free_places;
                 admission_table[university].emplace_back(&applicant->student);
                 break;
             }
