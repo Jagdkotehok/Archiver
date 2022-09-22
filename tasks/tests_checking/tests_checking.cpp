@@ -6,7 +6,7 @@ std::vector<std::string> StudentsOrder(const std::vector<StudentAction>& student
                                        const std::vector<size_t>& queries) {
     std::deque<std::string> works_order;
     for (const StudentAction& student_action : student_actions) {
-        if (student_action.side == Side::Top) {
+        if (student_action.side == Side::Bottom) {
             works_order.emplace_back(student_action.name);
         } else {
             works_order.emplace_front(student_action.name);
