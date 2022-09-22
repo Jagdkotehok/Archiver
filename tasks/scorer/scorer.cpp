@@ -14,6 +14,9 @@ ScoreTable GetScoredStudents(const Events& events, time_t score_time) {
     std::unordered_map<std::string, std::unordered_map<std::string, bool>>
         student_merge_request_state;  // 0 -- open   1 -- closed
     for (const Event* event_pointer : events_pointers) {
+        if (event_pointer->time > score_time) {
+            break;
+        }
         EventType event_type = event_pointer->event_type;
         if (event_type == EventType::MergeRequestOpen) {
             student_merge_request_state[event_pointer->student_name][event_pointer->task_name] = false;
