@@ -31,7 +31,7 @@ ScoreTable GetScoredStudents(const Events& events, time_t score_time) {
     ScoreTable score_table = {};
     for (const auto& [student, tasks] : student_task_state) {
         for (const auto& [task, task_state] : tasks) {
-            if (task_state && !student_merge_request_state[student][task]) { /// task accepted and merge_request closed
+            if (task_state && !student_merge_request_state[student][task]) {  /// task accepted and merge_request closed
                 score_table[student].emplace(task);
             }
         }
