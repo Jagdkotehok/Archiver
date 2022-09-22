@@ -10,9 +10,9 @@ ScoreTable GetScoredStudents(const Events& events, time_t score_time) {
     std::sort(events_pointers.begin(), events_pointers.end(),
               [&](const Event* l, const Event* r) { return l->time < r->time; });
     std::unordered_map<std::string, std::unordered_map<std::string, bool>>
-        student_task_state;  // 0 -- failed   1 -- success
+        student_task_state;  /// 0 -- failed   1 -- success
     std::unordered_map<std::string, std::unordered_map<std::string, bool>>
-        student_merge_request_state;  // 0 -- open   1 -- closed
+        student_merge_request_state;  /// 0 -- open   1 -- closed
     for (const Event* event_pointer : events_pointers) {
         if (event_pointer->time > score_time) {
             break;
