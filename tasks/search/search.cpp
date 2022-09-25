@@ -103,7 +103,7 @@ std::vector<std::string_view> Search(std::string_view text, std::string_view que
 
     std::vector<long double> tfidf_value(documents.size(), 0);
     std::set<std::string_view> unique_query_words;
-    
+
     size_t query_pos = 0;
     while (query_pos < query.size()) {
         if (!std::isalpha(query[query_pos])) {
