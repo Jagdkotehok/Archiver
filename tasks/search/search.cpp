@@ -57,9 +57,9 @@ std::vector<std::string_view> Search(std::string_view text, std::string_view que
     std::vector<std::string_view> documents;
     size_t text_pos = 0;
     while (text_pos < text.size()) {
-        size_t EOL_pos = FindNextEOL(text_pos, text);
-        documents.emplace_back(text.substr(text_pos, EOL_pos - text_pos));
-        text_pos = EOL_pos + 1;
+        size_t eol_pos = FindNextEOL(text_pos, text);
+        documents.emplace_back(text.substr(text_pos, eol_pos - text_pos));
+        text_pos = eol_pos + 1;
     }
 
     /// for TF
@@ -101,9 +101,9 @@ std::vector<std::string_view> Search(std::string_view text, std::string_view que
         word_counter.emplace_back(word_counter_in_doc);
     }
 
-    std::vector<long double> TFIDF_value(documents.size(), 0);
+    std::vector<long double> tfidf_value(documents.size(), 0);
     std::set<std::string_view> unique_query_words;
-
+    
     size_t query_pos = 0;
     while (query_pos < query.size()) {
         if (!std::isalpha(query[query_pos])) {
@@ -121,17 +121,17 @@ std::vector<std::string_view> Search(std::string_view text, std::string_view que
     }
     for (std::string_view query_word : unique_query_words) {
         for (size_t i = 0; i < documents.size(); ++i) {
-            long double TF_value = CalcTF(query_word, total_words[i], word_counter[i]);
-            long double IDF_value = CalcIDF(query_word, documents.size(), documents_with_word);
-            TFIDF_value[i] += TF_value * IDF_value;
+            long double tf_value = CalcTF(query_word, total_words[i], word_counter[i]);
+            long double idf_value = CalcIDF(query_word, documents.size(), documents_with_word);
+            tfidf_value[i] += tf_value * idf_value;
         }
     }
 
     std::vector<size_t> order_of_documents(documents.size());
     std::iota(order_of_documents.begin(), order_of_documents.end(), 0);
     std::sort(order_of_documents.begin(), order_of_documents.end(), [&](size_t l, size_t r) {
-        if (TFIDF_value[l] != TFIDF_value[r]) {
-            return TFIDF_value[l] > TFIDF_value[r];
+        if (tfidf_value[l] != tfidf_value[r]) {
+            return tfidf_value[l] > tfidf_value[r];
         }
         return l < r;
     });
@@ -142,7 +142,7 @@ std::vector<std::string_view> Search(std::string_view text, std::string_view que
             break;
         }
         size_t document_id = order_of_documents[i];
-        if (TFIDF_value[document_id] > static_cast<long double>(0)) {
+        if (tfidf_value[document_id] > static_cast<long double>(0)) {
             sorted_documents.emplace_back(documents[document_id]);
         }
     }
