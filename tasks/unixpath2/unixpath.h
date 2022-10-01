@@ -40,44 +40,44 @@ private:
         }
     }
 
-    std::vector<std::string_view> working_dir;
-    std::vector<std::string_view> starting_dir;
+    std::vector<std::string_view> working_dir_;
+    std::vector<std::string_view> starting_dir_;
 
 public:
-    UnixPath(std::string_view initial_dir) {
-        working_dir = starting_dir = {};
-        ProcessPath(initial_dir, working_dir);
-        ProcessPath(initial_dir, starting_dir);
+    explicit UnixPath(std::string_view initial_dir) {
+        working_dir_ = starting_dir_ = {};
+        ProcessPath(initial_dir, working_dir_);
+        ProcessPath(initial_dir, starting_dir_);
     }
 
     void ChangeDirectory(std::string_view path) {
         if (!path.empty() && path[0] == '/') {  /// path is absolute, so no need to consider previous path
-            working_dir.clear();
+            working_dir_.clear();
         }
-        ProcessPath(path, working_dir);
+        ProcessPath(path, working_dir_);
     }
 
     std::string GetAbsolutePath() const {
         std::string normalized_path = "/";
-        for (size_t i = 0; i < working_dir.size(); ++i) {
+        for (size_t i = 0; i < working_dir_.size(); ++i) {
             if (i != 0) {  /// not first word
                 normalized_path += "/";
             }
-            normalized_path += working_dir[i];
+            normalized_path += working_dir_[i];
         }
         return normalized_path;
     }
     std::string GetRelativePath() const {
-        std::string relative_path = "";
+        std::string relative_path;
         size_t equal_prefix_length = 0;
-        while (equal_prefix_length < std::min(working_dir.size(), starting_dir.size())) {
-            if (working_dir[equal_prefix_length] == starting_dir[equal_prefix_length]) {
+        while (equal_prefix_length < std::min(working_dir_.size(), starting_dir_.size())) {
+            if (working_dir_[equal_prefix_length] == starting_dir_[equal_prefix_length]) {
                 ++equal_prefix_length;
             } else {
                 break;
             }
         }
-        for (size_t i = equal_prefix_length; i < starting_dir.size(); ++i) {
+        for (size_t i = equal_prefix_length; i < starting_dir_.size(); ++i) {
             if (i != equal_prefix_length) {
                 relative_path += "/";
             }
@@ -86,9 +86,9 @@ public:
         if (relative_path.empty()) {
             relative_path += ".";
         }
-        for (size_t i = equal_prefix_length; i < working_dir.size(); ++i) {
+        for (size_t i = equal_prefix_length; i < working_dir_.size(); ++i) {
             relative_path += "/";
-            relative_path += working_dir[i];
+            relative_path += working_dir_[i];
         }
         return relative_path;
     }
