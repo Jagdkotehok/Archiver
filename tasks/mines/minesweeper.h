@@ -18,6 +18,7 @@ public:
         size_t x = 0;
         size_t y = 0;
     };
+
 private:
     size_t width_;
     size_t height_;
@@ -69,13 +70,13 @@ public:
         current_game_state_ = GameStatus::NOT_STARTED;
         cell_state_.assign(width_, std::vector<CellState>(height_));
         cells_.assign(width_, std::vector<Cell>(height_));
-        for (size_t i = 0; i < width_;  ++i) {
+        for (size_t i = 0; i < width_; ++i) {
             for (size_t j = 0; j < height_; ++j) {
                 cells_[i][j] = {i, j};
             }
         }
         std::mt19937 rnd(time(0));
-        for (size_t i = 0; i < mines_count; ++i) { /// this part works in O(N log(N)) where N is size of a field
+        for (size_t i = 0; i < mines_count; ++i) {  /// this part works in O(N log(N)) where N is size of a field
             while (true) {
                 size_t x = rnd() % width_;
                 size_t y = rnd() % height_;
@@ -96,7 +97,7 @@ public:
         current_game_state_ = GameStatus::NOT_STARTED;
         cell_state_.assign(width_, std::vector<CellState>(height_));
         cells_.assign(width_, std::vector<Cell>(height_));
-        for (size_t i = 0; i < width_;  ++i) {
+        for (size_t i = 0; i < width_; ++i) {
             for (size_t j = 0; j < height_; ++j) {
                 cells_[i][j] = {i, j};
             }
@@ -114,13 +115,13 @@ public:
         current_game_state_ = GameStatus::NOT_STARTED;
         cell_state_.assign(width_, std::vector<CellState>(height_));
         cells_.assign(width_, std::vector<Cell>(height_));
-        for (size_t i = 0; i < width_;  ++i) {
+        for (size_t i = 0; i < width_; ++i) {
             for (size_t j = 0; j < height_; ++j) {
                 cells_[i][j] = {i, j};
             }
         }
         std::mt19937 rnd(time(0));
-        for (size_t i = 0; i < mines_count; ++i) { /// this part works in O(N log(N)) where N is size of a field
+        for (size_t i = 0; i < mines_count; ++i) {  /// this part works in O(N log(N)) where N is size of a field
             while (true) {
                 size_t x = rnd() % width_;
                 size_t y = rnd() % height_;
@@ -141,7 +142,7 @@ public:
         current_game_state_ = GameStatus::NOT_STARTED;
         cell_state_.assign(width_, std::vector<CellState>(height_));
         cells_.assign(width_, std::vector<Cell>(height_));
-        for (size_t i = 0; i < width_;  ++i) {
+        for (size_t i = 0; i < width_; ++i) {
             for (size_t j = 0; j < height_; ++j) {
                 cells_[i][j] = {i, j};
             }
@@ -156,13 +157,14 @@ public:
             current_game_state_ = GameStatus::IN_PROGRESS;
             start_time_ = std::time(nullptr);
         }
-        if (current_game_state_ == GameStatus::DEFEAT || current_game_state_ == GameStatus::VICTORY) { /// game ended so nothing to do here
+        if (current_game_state_ == GameStatus::DEFEAT ||
+            current_game_state_ == GameStatus::VICTORY) {  /// game ended so nothing to do here
             return;
         }
-        if (cell_state_[cell.x][cell.y].is_marked) { /// cell marked so nothing to do here
+        if (cell_state_[cell.x][cell.y].is_marked) {  /// cell marked so nothing to do here
             return;
         }
-        if (cell_state_[cell.x][cell.y].is_with_mine) { /// clicked mine and lost game
+        if (cell_state_[cell.x][cell.y].is_with_mine) {  /// clicked mine and lost game
             current_game_state_ = GameStatus::DEFEAT;
             finish_time_ = std::time(nullptr);
             for (size_t i = 0; i < width_; ++i) {
@@ -188,7 +190,7 @@ public:
                         any_neighbour_with_mine = true;
                     }
                 }
-                if (any_neighbour_with_mine) { /// no more opening from this cell
+                if (any_neighbour_with_mine) {  /// no more opening from this cell
                     continue;
                 } else {
                     for (size_t direction = 0; direction < 8; ++direction) {
@@ -196,7 +198,8 @@ public:
                         if (neighbour == nullptr) {
                             continue;
                         }
-                        if (!cell_state_[neighbour->x][neighbour->y].is_opened && !cell_state_[neighbour->x][neighbour->y].is_marked) {
+                        if (!cell_state_[neighbour->x][neighbour->y].is_opened &&
+                            !cell_state_[neighbour->x][neighbour->y].is_marked) {
                             ++opened_cells_;
                             cell_state_[neighbour->x][neighbour->y].is_opened = true;
                             cells_to_open.emplace_back(neighbour);
@@ -215,13 +218,14 @@ public:
             current_game_state_ = GameStatus::IN_PROGRESS;
             start_time_ = std::time(nullptr);
         }
-        if (current_game_state_ == GameStatus::DEFEAT || current_game_state_ == GameStatus::VICTORY) { /// game ended so nothing to do here
+        if (current_game_state_ == GameStatus::DEFEAT ||
+            current_game_state_ == GameStatus::VICTORY) {  /// game ended so nothing to do here
             return;
         }
-        if (cell_state_[cell.x][cell.y].is_opened) { /// cell is opened so nothing to do here
+        if (cell_state_[cell.x][cell.y].is_opened) {  /// cell is opened so nothing to do here
             return;
         }
-        if (cell_state_[cell.x][cell.y].is_marked) { /// unmarking this cell
+        if (cell_state_[cell.x][cell.y].is_marked) {  /// unmarking this cell
             cell_state_[cell.x][cell.y].is_marked = false;
             return;
         }
