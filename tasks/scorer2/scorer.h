@@ -4,8 +4,6 @@
 #include <set>
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <unordered_set>
 
 using StudentName = std::string;
 using TaskName = std::string;
@@ -14,8 +12,8 @@ using ScoreTable = std::map<StudentName, std::set<TaskName>>;
 
 class Scorer {
 private:
-    std::unordered_map<StudentName, std::unordered_set<TaskName>> accepted_solves_;
-    std::unordered_map<StudentName, std::unordered_set<TaskName>> opened_merge_requests_;
+    std::map<StudentName, std::set<TaskName>> accepted_solves_;
+    std::map<StudentName, std::set<TaskName>> opened_merge_requests_;
 
 public:
     void OnCheckFailed(const StudentName& student_name, const TaskName& task_name) {
@@ -46,7 +44,17 @@ public:
         for (auto& [student, accepted_solves] : accepted_solves_) {
             std::set<TaskName> accepted_tasks;
             for (auto& task_name : accepted_solves) {
-                if (opened_merge_requests_.find(task_name) == opened_merge_requests_.end()) {
+                bool is_task_accepted = false;
+                if (opened_merge_requests_.find(student) ==
+                    opened_merge_requests_.end()) {  /// no merge request for this student
+                    is_task_accepted = true;
+                } else {  /// there are some merge request for this student
+                    if (opened_merge_requests_.at(student).find(task_name) ==
+                        opened_merge_requests_.at(student).end()) {  /// there is no opened merge request for this task
+                        is_task_accepted = true;
+                    }
+                }
+                if (is_task_accepted) {
                     accepted_tasks.emplace(task_name);
                 }
             }
