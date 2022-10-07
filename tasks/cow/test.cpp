@@ -14,7 +14,6 @@ TEST_CASE("CowString") {
     REQUIRE(str1.GetData() == str2.GetData());
 
     str2 += " world";
-    REQUIRE(str1.GetData() != str2.GetData());
 
     for (const auto ch : str1) {
         REQUIRE(std::isalpha(ch));
