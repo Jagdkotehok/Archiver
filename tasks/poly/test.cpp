@@ -38,4 +38,11 @@ TEST_CASE("Poly") {
 
     poly3 = poly1;
     REQUIRE(poly1 == poly3);
+
+    Poly poly4{{2, 1}};       // y = x^2
+    std::stringstream string_stream2;
+    std::ostream& stream2 = string_stream2;
+    stream2 << poly4;
+    REQUIRE("y = 1x^2" == string_stream2.str());
+
 }
