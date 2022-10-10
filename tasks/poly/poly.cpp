@@ -3,12 +3,12 @@
 Poly::Poly() {
 }
 Poly::Poly(std::initializer_list<int64_t> list) {
-    int64_t cur_coefficient = 0;
-    for (const int64_t& x : list) {
-        if (x != 0) {
-            coefficients_[cur_coefficient++] = x;
+    int64_t cur_power = 0;
+    for (const int64_t& y : list) {
+        if (y != 0) {
+            coefficients_[cur_power++] = y;
         } else {
-            cur_coefficient++;
+            ++cur_power;
         }
     }
 }
