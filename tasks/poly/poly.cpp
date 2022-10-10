@@ -1,6 +1,7 @@
 #include "poly.h"
 
-Poly::Poly() {}
+Poly::Poly() {
+}
 
 Poly::Poly(std::initializer_list<int64_t> list) {
     int64_t cur_power = 0;
