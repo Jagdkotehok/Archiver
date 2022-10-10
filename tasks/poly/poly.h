@@ -19,6 +19,7 @@ public:
 
     Poly& operator+=(const Poly& other);
     Poly& operator-=(const Poly& other);
+    Poly& operator*=(const Poly& other);
 
     Poly operator+(const Poly& other);
     Poly operator-(const Poly& other);

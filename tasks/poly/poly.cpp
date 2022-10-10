@@ -62,6 +62,21 @@ Poly& Poly::operator-=(const Poly& other) {
     return *this;
 }
 
+Poly& Poly::operator*=(const Poly& other) {
+    Poly initial = Poly();
+    initial.coefficients_ = coefficients_;
+    coefficients_.clear();
+    for (const auto& [power1, coefficient1] : initial.coefficients_) {
+        for (const auto& [power2, coefficient2] : initial.coefficients_) {
+            coefficients_[power1 + power2] += coefficient1 * coefficient2;
+            if (coefficients_[power1 + power2] == 0) {
+                coefficients_.erase(power1 + power2);
+            }
+        }
+    }
+    return *this;
+}
+
 Poly Poly::operator+(const Poly& other) {
     Poly result = Poly();
     for (const auto& [x, y] : coefficients_) {
