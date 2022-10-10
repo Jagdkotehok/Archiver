@@ -83,7 +83,7 @@ Poly& Poly::operator*=(const Poly& other) {
     return *this;
 }
 
-Poly Poly::operator+(const Poly& other) {
+Poly Poly::operator+(const Poly& other) const {
     Poly result = Poly();
     for (const auto& [x, y] : coefficients_) {
         result.coefficients_[x] += y;
@@ -100,7 +100,7 @@ Poly Poly::operator+(const Poly& other) {
     return result;
 }
 
-Poly Poly::operator-(const Poly& other) {
+Poly Poly::operator-(const Poly& other) const {
     Poly result = Poly();
     for (const auto& [x, y] : coefficients_) {
         result.coefficients_[x] += y;
@@ -117,7 +117,7 @@ Poly Poly::operator-(const Poly& other) {
     return result;
 }
 
-Poly Poly::operator*(const Poly& other) {
+Poly Poly::operator*(const Poly& other) const {
     Poly result = Poly();
     for (const auto& [power1, coefficient1] : coefficients_) {
         for (const auto& [power2, coefficient2] : other.coefficients_) {
