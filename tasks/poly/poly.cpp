@@ -1,7 +1,7 @@
 #include "poly.h"
 
-Poly::Poly() {
-}
+Poly::Poly() {}
+
 Poly::Poly(std::initializer_list<int64_t> list) {
     int64_t cur_power = 0;
     for (const int64_t& y : list) {
@@ -12,6 +12,7 @@ Poly::Poly(std::initializer_list<int64_t> list) {
         }
     }
 }
+
 Poly::Poly(std::initializer_list<std::pair<int64_t, int64_t>> list) {
     for (const auto& [x, y] : list) {
         if (y != 0) {
@@ -48,6 +49,9 @@ bool Poly::operator!=(const Poly& other) const {
 Poly& Poly::operator+=(const Poly& other) {
     for (const auto& [x, y] : other.coefficients_) {
         coefficients_[x] += y;
+        if (coefficients_[x] == 0) {
+            coefficients_.erase(x);
+        }
     }
     return *this;
 }
@@ -84,6 +88,9 @@ Poly Poly::operator+(const Poly& other) {
     }
     for (const auto& [x, y] : other.coefficients_) {
         result.coefficients_[x] += y;
+        if (result.coefficients_[x] == 0) {
+            result.coefficients_.erase(x);
+        }
     }
     return result;
 }
