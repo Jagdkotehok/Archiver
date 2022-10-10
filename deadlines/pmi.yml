@@ -1,3 +1,10 @@
+- group:    06-project
+  start:    10-10-2022 00:00
+  deadline: 23-10-2022 23:59
+  tasks:
+    - task: archiver
+      score: 1000
+
 - group:    05-homework-five
   start:    07-10-2022 00:00
   deadline: 17-10-2022 23:59
