@@ -63,7 +63,7 @@ public:
             result.elem_ += shift;
             return result;
         }
-        DifferenceType operator-(Iterator other) {
+        DifferenceType operator-(Iterator other) {  // NOLINT
             return elem_ - other.elem_;
         }
         Iterator& operator+=(DifferenceType shift) {
@@ -147,7 +147,7 @@ public:
         return data_;
     }
 
-    ValueType& operator[](size_t position) {
+    ValueType& operator[](size_t position) {  // NOLINT
         return data_[position];
     }
     ValueType operator[](size_t position) const {
@@ -220,10 +220,10 @@ public:
         std::swap(data_, other.data_);
     }
 
-    Iterator Begin() {
+    Iterator Begin() {  // NOLINT
         return Iterator(data_);
     }
-    Iterator End() {
+    Iterator End() {  // NOLINT
         return Iterator(data_ + size_);
     }
 
