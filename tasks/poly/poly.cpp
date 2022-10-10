@@ -23,7 +23,7 @@ Poly::Poly(std::initializer_list<std::pair<int64_t, int64_t>> list) {
     }
 }
 
-int64_t Poly::operator()(int64_t x) const {
+int64_t Poly::operator()(const int64_t x) const {
     int64_t result = 0;
     for (const auto& [power, coefficient] : coefficients_) {
         result += coefficient * BinPow(x, power);
@@ -32,17 +32,7 @@ int64_t Poly::operator()(int64_t x) const {
 }
 
 bool Poly::operator==(const Poly& other) const {
-    if (coefficients_.size() != other.coefficients_.size()) {
-        return false;
-    }
-    for (const auto& [x, y] : coefficients_) {
-        if (other.coefficients_.find(x) == other.coefficients_.end()) {
-            return false;
-        } else if (other.coefficients_.at(x) != y) {
-            return false;
-        }
-    }
-    return true;
+    return coefficients_ == other.coefficients_;
 }
 
 bool Poly::operator!=(const Poly& other) const {
@@ -69,8 +59,7 @@ Poly& Poly::operator-=(const Poly& other) {
 }
 
 Poly& Poly::operator*=(const Poly& other) {
-    Poly initial = Poly();
-    initial.coefficients_ = coefficients_;
+    Poly initial = *this;
     coefficients_.clear();
     for (const auto& [power1, coefficient1] : initial.coefficients_) {
         for (const auto& [power2, coefficient2] : other.coefficients_) {
@@ -84,13 +73,7 @@ Poly& Poly::operator*=(const Poly& other) {
 }
 
 Poly Poly::operator+(const Poly& other) const {
-    Poly result = Poly();
-    for (const auto& [x, y] : coefficients_) {
-        result.coefficients_[x] += y;
-        if (result.coefficients_[x] == 0) {
-            result.coefficients_.erase(x);
-        }
-    }
+    Poly result = *this;
     for (const auto& [x, y] : other.coefficients_) {
         result.coefficients_[x] += y;
         if (result.coefficients_[x] == 0) {
@@ -101,13 +84,7 @@ Poly Poly::operator+(const Poly& other) const {
 }
 
 Poly Poly::operator-(const Poly& other) const {
-    Poly result = Poly();
-    for (const auto& [x, y] : coefficients_) {
-        result.coefficients_[x] += y;
-        if (result.coefficients_[x] == 0) {
-            result.coefficients_.erase(x);
-        }
-    }
+    Poly result = *this;
     for (const auto& [x, y] : other.coefficients_) {
         result.coefficients_[x] -= y;
         if (result.coefficients_[x] == 0) {
@@ -128,17 +105,6 @@ Poly Poly::operator*(const Poly& other) const {
         }
     }
     return result;
-}
-
-Poly& Poly::operator=(const Poly& other) {
-    coefficients_.clear();
-    for (const auto& [x, y] : other.coefficients_) {
-        coefficients_[x] = y;
-        if (coefficients_[x] == 0) {
-            coefficients_.erase(y);
-        }
-    }
-    return *this;
 }
 
 Poly Poly::operator-() const {
@@ -169,8 +135,6 @@ std::ostream& operator<<(std::ostream& os, const Poly& poly) {
             }
             if (x == 0) {
                 os << std::abs(y);
-            } else if (x == 1) {
-                os << std::abs(y) << "x";
             } else {
                 os << std::abs(y) << "x^" << x;
             }
