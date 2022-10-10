@@ -86,6 +86,9 @@ Poly Poly::operator+(const Poly& other) {
     Poly result = Poly();
     for (const auto& [x, y] : coefficients_) {
         result.coefficients_[x] += y;
+        if (result.coefficients_[x] == 0) {
+            result.coefficients_.erase(x);
+        }
     }
     for (const auto& [x, y] : other.coefficients_) {
         result.coefficients_[x] += y;
@@ -100,6 +103,9 @@ Poly Poly::operator-(const Poly& other) {
     Poly result = Poly();
     for (const auto& [x, y] : coefficients_) {
         result.coefficients_[x] += y;
+        if (result.coefficients_[x] == 0) {
+            result.coefficients_.erase(x);
+        }
     }
     for (const auto& [x, y] : other.coefficients_) {
         result.coefficients_[x] -= y;
