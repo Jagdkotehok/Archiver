@@ -25,6 +25,8 @@ public:
     Poly operator-(const Poly& other);
     Poly operator*(const Poly& other);
 
+    Poly& operator=(const Poly& other);
+
     Poly operator-() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Poly& poly);
