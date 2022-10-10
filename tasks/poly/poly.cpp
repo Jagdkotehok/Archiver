@@ -1,6 +1,7 @@
 #include "poly.h"
 
 Poly::Poly() {
+    coefficients_.clear();
 }
 
 Poly::Poly(std::initializer_list<int64_t> list) {
