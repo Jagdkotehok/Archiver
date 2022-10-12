@@ -11,7 +11,7 @@ Polynom NormalizeCoefficients(Polynom polynom) {
         }
         coefficient += polynom[i].second;
     }
-    if (coefficient) {
+    if (coefficient && !polynom.empty()) {
         result.emplace_back(polynom.back().first, coefficient);
     }
     return result;
@@ -21,7 +21,7 @@ Poly::Poly() : poly_() {
 }
 
 Poly::Poly(const std::initializer_list<int64_t>& list) {
-    int64_t current_power = 0;
+    size_t current_power = 0;
     poly_.reserve(list.size());
     for (const auto& coefficient : list) {
         poly_.emplace_back(current_power++, coefficient);
@@ -72,15 +72,15 @@ Poly& Poly::operator-=(const Poly& other) {
 }
 
 Poly& Poly::operator*=(const Poly& other) {
-    Polynom result;
-    result.reserve(poly_.size() * other.poly_.size());
+    Poly result;
+    result.poly_.reserve(poly_.size() * other.poly_.size());
     for (const auto& [power1, coefficient1] : poly_) {
         for (const auto& [power2, coefficient2] : other.poly_) {
-            poly_.emplace_back(power1 + power2, coefficient1 + coefficient2);
+            result.poly_.emplace_back(power1 + power2, coefficient1 + coefficient2);
         }
     }
-    poly_ = NormalizeCoefficients(poly_);
-    return *this;
+    result.poly_ = NormalizeCoefficients(result.poly_);
+    return *this = result;
 }
 
 Poly Poly::operator+(const Poly& other) const {
@@ -120,7 +120,6 @@ Poly Poly::operator-() const {
     for (auto& [power, coefficient] : result.poly_) {
         coefficient *= -1;
     }
-    result.poly_ = NormalizeCoefficients(result.poly_);
     return result;
 }
 
