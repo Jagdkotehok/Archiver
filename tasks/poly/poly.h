@@ -1,14 +1,16 @@
 #pragma once
 
-#include <map>
+#include <vector>
 #include <cstdint>
 #include <ostream>
 
+using Polynom = std::vector<std::pair<int64_t, int64_t>>;
+
+Polynom NormalizeCoefficients(Polynom polynom);
+
 class Poly {
 public:
-    std::map<int64_t, int64_t, std::greater<int64_t>> coefficients_;
-
-    void NormalizeCoefficients();
+    Polynom poly_;
 
     explicit Poly();
     Poly(const std::initializer_list<int64_t>& list);
