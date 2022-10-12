@@ -5,20 +5,19 @@ Poly::Poly() {
 }
 
 Poly::Poly(std::initializer_list<int64_t> list) {
-    int64_t cur_power = 0;
-    for (const int64_t& y : list) {
-        if (y != 0) {
-            coefficients_[cur_power++] = y;
-        } else {
-            ++cur_power;
+    int64_t current_power = 0;
+    for (const auto& coefficient : list) {
+        if (coefficient != 0) {
+            coefficients_[current_power] = coefficient;
         }
+        ++current_power;
     }
 }
 
 Poly::Poly(std::initializer_list<std::pair<int64_t, int64_t>> list) {
-    for (const auto& [x, y] : list) {
-        if (y != 0) {
-            coefficients_[x] = y;
+    for (const auto& [power, coefficient] : list) {
+        if (coefficient != 0) {
+            coefficients_[power] = coefficient;
         }
     }
 }
@@ -38,21 +37,22 @@ bool Poly::operator==(const Poly& other) const {
 bool Poly::operator!=(const Poly& other) const {
     return !(*this == other);
 }
+
 Poly& Poly::operator+=(const Poly& other) {
-    for (const auto& [x, y] : other.coefficients_) {
-        coefficients_[x] += y;
-        if (coefficients_[x] == 0) {
-            coefficients_.erase(x);
+    for (const auto& [power, coefficient] : other.coefficients_) {
+        coefficients_[power] += coefficient;
+        if (coefficients_[power] == 0) {
+            coefficients_.erase(power);
         }
     }
     return *this;
 }
 
 Poly& Poly::operator-=(const Poly& other) {
-    for (const auto& [x, y] : other.coefficients_) {
-        coefficients_[x] -= y;
-        if (coefficients_[x] == 0) {
-            coefficients_.erase(x);
+    for (const auto& [power, coefficient] : other.coefficients_) {
+        coefficients_[power] -= coefficient;
+        if (coefficients_[power] == 0) {
+            coefficients_.erase(power);
         }
     }
     return *this;
@@ -74,10 +74,10 @@ Poly& Poly::operator*=(const Poly& other) {
 
 Poly Poly::operator+(const Poly& other) const {
     Poly result = *this;
-    for (const auto& [x, y] : other.coefficients_) {
-        result.coefficients_[x] += y;
-        if (result.coefficients_[x] == 0) {
-            result.coefficients_.erase(x);
+    for (const auto& [power, coefficient] : other.coefficients_) {
+        result.coefficients_[power] += coefficient;
+        if (result.coefficients_[power] == 0) {
+            result.coefficients_.erase(power);
         }
     }
     return result;
@@ -85,10 +85,10 @@ Poly Poly::operator+(const Poly& other) const {
 
 Poly Poly::operator-(const Poly& other) const {
     Poly result = *this;
-    for (const auto& [x, y] : other.coefficients_) {
-        result.coefficients_[x] -= y;
-        if (result.coefficients_[x] == 0) {
-            result.coefficients_.erase(x);
+    for (const auto& [power, coefficient] : other.coefficients_) {
+        result.coefficients_[power] -= coefficient;
+        if (result.coefficients_[power] == 0) {
+            result.coefficients_.erase(power);
         }
     }
     return result;
@@ -108,9 +108,9 @@ Poly Poly::operator*(const Poly& other) const {
 }
 
 Poly Poly::operator-() const {
-    Poly result = Poly();
-    for (const auto& [x, y] : coefficients_) {
-        result.coefficients_[x] = -y;
+    Poly result = *this;
+    for (auto& [power, coefficient] : result.coefficients_) {
+        coefficient *= -1;
     }
     return result;
 }
@@ -121,22 +121,22 @@ std::ostream& operator<<(std::ostream& os, const Poly& poly) {
         os << 0;
     } else {
         bool is_first_coefficient = true;
-        for (const auto& [x, y] : poly.coefficients_) {
+        for (const auto& [power, coefficient] : poly.coefficients_) {
             if (is_first_coefficient) {
-                if (y < 0) {
+                if (coefficient < 0) {
                     os << "-";
                 }
             } else {
-                if (y < 0) {
+                if (coefficient < 0) {
                     os << " - ";
                 } else {
                     os << " + ";
                 }
             }
-            if (x == 0) {
-                os << std::abs(y);
+            if (power == 0) {
+                os << std::abs(coefficient);
             } else {
-                os << std::abs(y) << "x^" << x;
+                os << std::abs(coefficient) << "x^" << power;
             }
             is_first_coefficient = false;
         }
