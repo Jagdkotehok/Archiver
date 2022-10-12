@@ -1,25 +1,32 @@
 #include "poly.h"
 
-Poly::Poly() {
-    coefficients_.clear();
+void Poly::NormalizeCoefficients() {
+    auto it = coefficients_.begin();
+    while (it != coefficients_.end()) {
+        if (it->second == 0) {  /// coefficient = 0
+            it = coefficients_.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
-Poly::Poly(std::initializer_list<int64_t> list) {
+Poly::Poly() : coefficients_() {
+}
+
+Poly::Poly(const std::initializer_list<int64_t>& list) {
     int64_t current_power = 0;
     for (const auto& coefficient : list) {
-        if (coefficient != 0) {
-            coefficients_[current_power] = coefficient;
-        }
-        ++current_power;
+        coefficients_[current_power++] += coefficient;
     }
+    NormalizeCoefficients();
 }
 
-Poly::Poly(std::initializer_list<std::pair<int64_t, int64_t>> list) {
+Poly::Poly(const std::initializer_list<std::pair<int64_t, int64_t>>& list) {
     for (const auto& [power, coefficient] : list) {
-        if (coefficient != 0) {
-            coefficients_[power] = coefficient;
-        }
+        coefficients_[power] += coefficient;
     }
+    NormalizeCoefficients();
 }
 
 int64_t Poly::operator()(const int64_t x) const {
@@ -41,20 +48,16 @@ bool Poly::operator!=(const Poly& other) const {
 Poly& Poly::operator+=(const Poly& other) {
     for (const auto& [power, coefficient] : other.coefficients_) {
         coefficients_[power] += coefficient;
-        if (coefficients_[power] == 0) {
-            coefficients_.erase(power);
-        }
     }
+    NormalizeCoefficients();
     return *this;
 }
 
 Poly& Poly::operator-=(const Poly& other) {
     for (const auto& [power, coefficient] : other.coefficients_) {
         coefficients_[power] -= coefficient;
-        if (coefficients_[power] == 0) {
-            coefficients_.erase(power);
-        }
     }
+    NormalizeCoefficients();
     return *this;
 }
 
@@ -64,11 +67,9 @@ Poly& Poly::operator*=(const Poly& other) {
     for (const auto& [power1, coefficient1] : initial.coefficients_) {
         for (const auto& [power2, coefficient2] : other.coefficients_) {
             coefficients_[power1 + power2] += coefficient1 * coefficient2;
-            if (coefficients_[power1 + power2] == 0) {
-                coefficients_.erase(power1 + power2);
-            }
         }
     }
+    NormalizeCoefficients();
     return *this;
 }
 
@@ -76,10 +77,8 @@ Poly Poly::operator+(const Poly& other) const {
     Poly result = *this;
     for (const auto& [power, coefficient] : other.coefficients_) {
         result.coefficients_[power] += coefficient;
-        if (result.coefficients_[power] == 0) {
-            result.coefficients_.erase(power);
-        }
     }
+    result.NormalizeCoefficients();
     return result;
 }
 
@@ -87,10 +86,8 @@ Poly Poly::operator-(const Poly& other) const {
     Poly result = *this;
     for (const auto& [power, coefficient] : other.coefficients_) {
         result.coefficients_[power] -= coefficient;
-        if (result.coefficients_[power] == 0) {
-            result.coefficients_.erase(power);
-        }
     }
+    result.NormalizeCoefficients();
     return result;
 }
 
@@ -99,11 +96,9 @@ Poly Poly::operator*(const Poly& other) const {
     for (const auto& [power1, coefficient1] : coefficients_) {
         for (const auto& [power2, coefficient2] : other.coefficients_) {
             result.coefficients_[power1 + power2] += coefficient1 * coefficient2;
-            if (result.coefficients_[power1 + power2] == 0) {
-                result.coefficients_.erase(power1 + power2);
-            }
         }
     }
+    result.NormalizeCoefficients();
     return result;
 }
 
@@ -112,6 +107,7 @@ Poly Poly::operator-() const {
     for (auto& [power, coefficient] : result.coefficients_) {
         coefficient *= -1;
     }
+    result.NormalizeCoefficients();
     return result;
 }
 
