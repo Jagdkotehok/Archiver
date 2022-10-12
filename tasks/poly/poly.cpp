@@ -76,7 +76,7 @@ Poly& Poly::operator*=(const Poly& other) {
     result.poly_.reserve(poly_.size() * other.poly_.size());
     for (const auto& [power1, coefficient1] : poly_) {
         for (const auto& [power2, coefficient2] : other.poly_) {
-            result.poly_.emplace_back(power1 + power2, coefficient1 + coefficient2);
+            result.poly_.emplace_back(power1 + power2, coefficient1 * coefficient2);
         }
     }
     result.poly_ = NormalizeCoefficients(result.poly_);
