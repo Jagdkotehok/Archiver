@@ -8,7 +8,7 @@ class Poly {
 public:
     std::map<int64_t, int64_t, std::greater<int64_t>> coefficients_;
 
-    Poly();
+    explicit Poly();
     Poly(std::initializer_list<int64_t> list);
     Poly(std::initializer_list<std::pair<int64_t, int64_t>> list);
 
