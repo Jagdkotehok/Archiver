@@ -43,45 +43,28 @@ class ArchiverTester:
     def succeed_test_case(name):
         print("OK   [{name}]".format(name=name))
 
-    def test_compression(self, name):
-        try:
-            test_case_data_dir = self.get_test_case_data_dir(name)
-            input_files = os.listdir(os.path.join(test_case_data_dir, "input"))
-            expected_output_file = os.path.join(test_case_data_dir, "output")
-
-            with tempfile.NamedTemporaryFile() as output_file:
-                subprocess.check_call([self.archiver_executable, "-c", output_file.name] + input_files)
-
-                if not filecmp.cmp(expected_output_file, output_file.name, shallow=False):
-                    self.fail_test_case(name, "compressed file differs from expected")
-
-            self.succeed_test_case(name)
-        except subprocess.CalledProcessError:
-            self.fail_test_case(name, "archiver finished with non-zero exit code")
-
-    def test_decompression(self, name):
-        try:
-            test_case_data_dir = self.get_test_case_data_dir(name)
-            input_file = os.path.join(test_case_data_dir, "input")
-            expected_output_dir = os.path.join(test_case_data_dir, "output")
-
-            with tempfile.TemporaryDirectory() as output_dir:
-                subprocess.check_call([self.archiver_executable, "-d", input_file], cwd=output_dir)
-
-                if not are_dir_trees_equal(expected_output_dir, output_dir):
-                    self.fail_test_case(name, "decompressed files differ from expected")
-
-            self.succeed_test_case(name)
-        except subprocess.CalledProcessError:
-            self.fail_test_case(name, "archiver finished with non-zero exit code")
+    def run_tests(self):
+        all_ok = True
+        files = os.listdir(self.test_data_dir)
+        for name in files:
+            if os.path.isdir(self.get_test_case_data_dir(name)):
+                try:
+                    tester.test_compression_decompression(name)
+                except ArchiverTester.TestCaseFailedException:
+                    all_ok = False
+        return all_ok
 
     def test_compression_decompression(self, name):
         try:
             test_case_data_dir = self.get_test_case_data_dir(name)
-            input_files = os.listdir(test_case_data_dir)
+            test_case_archive = self.get_test_case_data_dir(name + ".arc")
+            input_files = sorted(os.listdir(test_case_data_dir))
 
             with tempfile.NamedTemporaryFile() as output_file:
                 subprocess.check_call([self.archiver_executable, "-c", output_file.name] + input_files)
+
+                if not filecmp.cmp(test_case_archive, output_file.name, shallow=False):
+                    self.fail_test_case(name, "compressed file differs from expected")
 
                 with tempfile.TemporaryDirectory() as output_dir:
                     subprocess.check_call([self.archiver_executable, "-d", output_file.name], cwd=output_dir)
@@ -99,7 +82,5 @@ if __name__ == "__main__":
 
     print("Running archiver tests\nExecutable: {executable}\nTest data: {test_data}".format(executable=tester.archiver_executable, test_data=tester.test_data_dir))
 
-    try:
-        tester.test_compression_decompression("compress_decompress")
-    except ArchiverTester.TestCaseFailedException:
+    if not tester.run_tests():
         sys.exit(1)
