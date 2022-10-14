@@ -61,7 +61,7 @@ class ArchiverTester:
             input_files = sorted(os.listdir(test_case_data_dir))
 
             with tempfile.NamedTemporaryFile() as output_file:
-                subprocess.check_call([self.archiver_executable, "-c", output_file.name] + input_files)
+                subprocess.check_call([self.archiver_executable, "-c", output_file.name] + input_files, cwd=test_case_data_dir)
 
                 if not filecmp.cmp(test_case_archive, output_file.name, shallow=False):
                     self.fail_test_case(name, "compressed file differs from expected")
