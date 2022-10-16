@@ -7,4 +7,5 @@ add_catch(test_robot
     test.cpp
     topology.cpp
     world.cpp
+    point.cpp
 )
