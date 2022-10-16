@@ -45,8 +45,7 @@ class ArchiverTester:
 
     def run_tests(self):
         all_ok = True
-        # files = os.listdir(self.test_data_dir)
-        files = ["empty"]
+        files = os.listdir(self.test_data_dir)
         for name in files:
             if os.path.isdir(self.get_test_case_data_dir(name)):
                 try:
