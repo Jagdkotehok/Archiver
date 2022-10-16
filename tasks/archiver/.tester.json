@@ -1,4 +1,5 @@
 {
     "allow_change": "*",
-    "tests": "test_archiver"
+    "tests": "test_archiver",
+    "linter": false
 }
