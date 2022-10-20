@@ -32,4 +32,3 @@ std::vector<Point> PlanarTopology::GetNeighbours(const Point& point) const {
     }
     return result;
 }
-

@@ -52,4 +52,3 @@ size_t Topology::PointToIdx(const Point& p) const {
 Point Topology::IdxToPoint(const size_t& idx) const {
     return Point{.x = idx % width, .y = idx / width};
 }
-

@@ -27,4 +27,3 @@ public:
 
     static const Distance UNREACHABLE = -1;
 };
-
