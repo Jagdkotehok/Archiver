@@ -92,5 +92,6 @@ std::vector<Point> CheckersTopology::GetNeighbours(const Point& point) const {
     }
 
     return result;
+
 }
 
