@@ -9,7 +9,7 @@ Writer::Writer(const std::string& filename) {
 
 Writer::~Writer() {
     if (need_to_write) {
-        working_stream_ << char_to_write;
+        working_stream_.put(static_cast<char>(char_to_write));
     }
     working_stream_.close();
 }
@@ -40,7 +40,7 @@ void Writer::WriteOne() {
     ++working_power;
     need_to_write = true;
     if (working_power == 8) {
-        working_stream_ << char_to_write;
+        working_stream_.put(static_cast<char>(char_to_write));
         working_power = 0;
         char_to_write = 0;
         need_to_write = false;
@@ -51,7 +51,7 @@ void Writer::WriteZero() {
     ++working_power;
     need_to_write = true;
     if (working_power == 8) {
-        working_stream_ << char_to_write;
+        working_stream_.put(static_cast<char>(char_to_write));
         working_power = 0;
         char_to_write = 0;
         need_to_write = false;
