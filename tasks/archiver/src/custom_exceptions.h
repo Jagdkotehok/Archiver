@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <exception>
 
 class CustomExceptions : public std::exception {

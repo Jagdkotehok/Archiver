@@ -5,6 +5,7 @@
 #pragma once
 
 #include <fstream>
+#include <cstdint>
 
 #include "utility.h"
 

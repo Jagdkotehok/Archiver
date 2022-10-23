@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include "reader.h"
 #include "utility.h"
 
