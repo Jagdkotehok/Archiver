@@ -51,6 +51,8 @@ private:
                 } else {
                     return;
                 }
+            } else {
+                return;
             }
         }
     }
