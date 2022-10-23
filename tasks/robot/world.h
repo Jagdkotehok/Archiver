@@ -10,6 +10,12 @@ class World {
 public:
     class IllegalMoveException : public std::exception {};
 
+    Point start_;
+    Point end_;
+    Point current_position_;
+
+    const Topology& topology_;
+
     World(const Topology& topology, Point start, Point end);
 
     std::unordered_map<Point, Topology::Distance> Lookup() const;
