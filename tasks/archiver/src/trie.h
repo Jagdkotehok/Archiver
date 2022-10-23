@@ -9,10 +9,9 @@
 
 #include "utility.h"
 
-class Trie{
+class Trie {
 public:
-
-    class TrieVertex  {
+    class TrieVertex {
     public:
         TrieVertex* left_child_;
         TrieVertex* right_child_;
@@ -31,6 +30,7 @@ public:
     explicit Trie(TrieVertex* root);
     ~Trie();
 
-    void GetHuffmanCode(TrieVertex* v, std::vector<std::pair<utility::Symbol, utility::Code>>& result, utility::Code& current_code);
+    void GetHuffmanCode(TrieVertex* v, std::vector<std::pair<utility::Symbol, utility::Code>>& result,
+                        utility::Code& current_code);
     void AddSymbol(TrieVertex* v, const utility::Code& code, size_t id, utility::Symbol symbol);
 };

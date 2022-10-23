@@ -8,7 +8,6 @@
 
 #include "compressor.h"
 
-
 std::unordered_map<utility::Symbol, uint64_t> Compressor::GetSymbolFrequencies(const std::string& filename) {
     std::unordered_map<utility::Symbol, uint64_t> symbol_frequencies;
 
@@ -55,8 +54,7 @@ std::vector<std::pair<utility::Symbol, utility::Code>> Compressor::GetAnyHuffman
         auto [second_vertex_priority, second_vertex_pointer] = *p_queue.begin();
         p_queue.erase(p_queue.begin());
         Trie::TrieVertex* new_vertex =
-            new Trie::TrieVertex(first_vertex_pointer,
-                                 second_vertex_pointer,
+            new Trie::TrieVertex(first_vertex_pointer, second_vertex_pointer,
                                  std::min(first_vertex_pointer->value_, second_vertex_pointer->value_));
         p_queue.emplace(first_vertex_priority + second_vertex_priority, new_vertex);
     }
@@ -71,17 +69,16 @@ std::vector<std::pair<utility::Symbol, utility::Code>> Compressor::GetAnyHuffman
     return result;
 }
 
-void Compressor::GetCanonicalHuffmanCode(
-    std::vector<std::pair<utility::Symbol, utility::Code>>& huffman_code) {
+void Compressor::GetCanonicalHuffmanCode(std::vector<std::pair<utility::Symbol, utility::Code>>& huffman_code) {
 
     std::sort(huffman_code.begin(), huffman_code.end(),
               [](const std::pair<utility::Symbol, utility::Code>& left,
                  const std::pair<utility::Symbol, utility::Code>& right) {
-                if (left.second.size() != right.second.size()) {
-                    return left.second.size() < right.second.size(); /// ordering by size of code
-                } else {
-                    return left.first < right.first; /// then ordering by symbol
-                }
+                  if (left.second.size() != right.second.size()) {
+                      return left.second.size() < right.second.size();  /// ordering by size of code
+                  } else {
+                      return left.first < right.first;  /// then ordering by symbol
+                  }
               });
 
     utility::Code current_code = {};
@@ -127,11 +124,11 @@ void Compressor::CompressFile(const std::string& filename, Writer& current_write
         ++length_count[code.size()];
     }
 
-    current_writer.Write(huffman_code.size()); /// writing count of distinct symbols
+    current_writer.Write(huffman_code.size());  /// writing count of distinct symbols
 
     for (const auto& [symbol, code] : huffman_code) {
         current_writer.Write(symbol);
-    } /// writing every distinct symbol in huffman_code order
+    }  /// writing every distinct symbol in huffman_code order
 
     for (size_t i = 1; i < length_count.size(); ++i) {
         current_writer.Write(length_count[i]);
@@ -139,20 +136,20 @@ void Compressor::CompressFile(const std::string& filename, Writer& current_write
 
     for (const uint8_t cur_char : filename) {
         current_writer.Write(symbol_to_code[cur_char]);
-    } /// writing filename
+    }  /// writing filename
 
-    current_writer.Write(symbol_to_code[utility::FILENAME_END]); /// writing special symbol
+    current_writer.Write(symbol_to_code[utility::FILENAME_END]);  /// writing special symbol
 
     std::ifstream current_file(filename, std::ios::out | std::ios::binary);
 
     while (current_file.peek() != EOF) {
         uint8_t cur_symbol = current_file.get();
         current_writer.Write(symbol_to_code[cur_symbol]);
-    } /// writing content of file
+    }  /// writing content of file
 
     if (is_last_file) {
         current_writer.Write(symbol_to_code[utility::ARCHIVE_END]);
     } else {
         current_writer.Write(symbol_to_code[utility::ONE_MORE_FILE]);
-    } /// writing end of file special symbol
+    }  /// writing end of file special symbol
 }

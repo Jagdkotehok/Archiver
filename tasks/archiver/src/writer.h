@@ -20,8 +20,8 @@ public:
     explicit Writer(const std::string& filename);
     ~Writer();
 
-    void Write(utility::Code code); /// random count of bits value
-    void Write(utility::Symbol symbol); /// strict 9-bit value
+    void Write(utility::Code code);      /// random count of bits value
+    void Write(utility::Symbol symbol);  /// strict 9-bit value
 
 private:
     void WriteOne();

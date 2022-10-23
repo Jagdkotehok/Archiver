@@ -14,7 +14,6 @@ Writer::~Writer() {
     working_stream_.close();
 }
 
-
 void Writer::Write(utility::Symbol symbol) {
     for (uint8_t i = 0; i < 9; ++i) {
         if ((1 << (8 - i)) & symbol) {

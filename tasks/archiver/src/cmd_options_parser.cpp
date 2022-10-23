@@ -16,10 +16,10 @@ public:
     std::vector<Option> options;
 
 private:
-    void AddOption_(Option& opt){}; /// NOLINT
+    void AddOption_(Option& opt){};  /// NOLINT
 
     template <typename... Args>
-    void AddOption_(Option& opt, const std::string& arg, Args... args) { /// NOLINT
+    void AddOption_(Option& opt, const std::string& arg, Args... args) {  /// NOLINT
         opt.arguments.template emplace_back(arg);
         AddOption_(opt, args...);
     }
@@ -33,7 +33,7 @@ public:
         options.template emplace_back(cur_option);
     }
 
-    std::string FindOption(int argc, char**argv) {
+    std::string FindOption(int argc, char** argv) {
         size_t args_cnt = static_cast<size_t>(argc);
 
         for (const Option& cur_option : options) {

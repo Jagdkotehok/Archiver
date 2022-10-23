@@ -9,5 +9,4 @@
 
 class CustomExceptions : public std::exception {
 public:
-
 };

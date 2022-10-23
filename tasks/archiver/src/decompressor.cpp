@@ -9,7 +9,7 @@ bool Decompressor::DecompressFile(Reader& working_reader) {
     utility::Symbol symbols_count = working_reader.ReadSymbol();
 
     std::vector<std::pair<utility::Symbol, utility::Code>> canonical_huffman_code(symbols_count);
-    for (auto &[symbol, code] : canonical_huffman_code) {
+    for (auto& [symbol, code] : canonical_huffman_code) {
         symbol = working_reader.ReadSymbol();
     }
 
@@ -25,7 +25,7 @@ bool Decompressor::DecompressFile(Reader& working_reader) {
     utility::Code current_code;
     size_t needed_length = 0;
 
-    for (auto &[symbol, code] : canonical_huffman_code) {
+    for (auto& [symbol, code] : canonical_huffman_code) {
         while (length_count[needed_length] == 0) {
             ++needed_length;
         }
@@ -59,7 +59,7 @@ bool Decompressor::DecompressFile(Reader& working_reader) {
     }
 
     std::string resulting_filename;
-    bool is_reading_file_content = false; /// 0 -- reading filename, 1 -- reading file content
+    bool is_reading_file_content = false;  /// 0 -- reading filename, 1 -- reading file content
 
     std::ofstream output_file;
 

@@ -43,7 +43,6 @@ void Trie::GetHuffmanCode(Trie::TrieVertex *v, std::vector<std::pair<utility::Sy
     }
 }
 Trie::Trie(Trie::TrieVertex *root) : root_(root) {
-
 }
 
 void Trie::AddSymbol(Trie::TrieVertex *v, const utility::Code &code, size_t id, utility::Symbol symbol) {
