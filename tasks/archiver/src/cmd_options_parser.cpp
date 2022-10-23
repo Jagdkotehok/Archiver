@@ -20,7 +20,7 @@ private:
 
     template <typename... Args>
     void AddOption_(Option& opt, const std::string& arg, Args... args) {  /// NOLINT
-        opt.arguments.template emplace_back(arg);
+        opt.arguments.emplace_back(arg);
         AddOption_(opt, args...);
     }
 
@@ -30,7 +30,7 @@ public:
         Option cur_option;
         cur_option.name = name;
         AddOption_(cur_option, args...);
-        options.template emplace_back(cur_option);
+        options.emplace_back(cur_option);
     }
 
     std::string FindOption(int argc, char** argv) {
@@ -39,23 +39,23 @@ public:
         for (const Option& cur_option : options) {
 
             size_t argv_pos = 1;
-            int state = 0;
+            int state = 0;  /// -1 -- not this option   0 -- might be this option   1 -- definitely this option
 
             for (const std::string& arg : cur_option.arguments) {
                 std::string argv_cur_arg = static_cast<std::string>(argv[argv_pos]);
 
-                if (argv_pos == args_cnt) {
+                if (argv_pos == args_cnt) {  /// already exceeded given args count
                     state = -1;
                     break;
                 }
 
-                if (arg == "any") {
+                if (arg == "any") {  /// any arbitrary word
                     ++argv_pos;
                     continue;
-                } else if (arg == "any...") {
+                } else if (arg == "any...") {  /// arbitrary count of arbitrary words, but at least one
                     state = 1;
                     break;
-                } else {
+                } else {  /// given parameter
                     if (argv_cur_arg != arg) {
                         state = -1;
                         break;

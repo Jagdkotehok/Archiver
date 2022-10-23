@@ -13,6 +13,7 @@ class Reader {
 public:
     std::ifstream working_stream_;
 
+    bool is_char_valid = true;
     uint8_t char_to_read = 0;
     uint8_t working_power = 0;
 

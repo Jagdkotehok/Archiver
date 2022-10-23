@@ -4,9 +4,14 @@
 
 #pragma once
 
-#include <cstdint>
 #include <exception>
 
-class CustomExceptions : public std::exception {
+class CustomException : public std::exception {
+private:
+    const char* message_;
+
 public:
+    explicit CustomException(const char* msg);
+
+    const char* what() const noexcept override;
 };
