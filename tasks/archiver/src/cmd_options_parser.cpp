@@ -4,7 +4,6 @@
 
 #include <string>
 #include <vector>
-#include <iostream>
 
 class OptionsParser {
 public:
@@ -17,10 +16,10 @@ public:
     std::vector<Option> options;
 
 private:
-    void AddOption_(Option& opt){};
+    void AddOption_(Option& opt){}; /// NOLINT
 
     template <typename... Args>
-    void AddOption_(Option& opt, const std::string& arg, Args... args) {
+    void AddOption_(Option& opt, const std::string& arg, Args... args) { /// NOLINT
         opt.arguments.template emplace_back(arg);
         AddOption_(opt, args...);
     }
