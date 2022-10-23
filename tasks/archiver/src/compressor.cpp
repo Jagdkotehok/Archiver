@@ -5,8 +5,10 @@
 #include <set>
 #include <unordered_map>
 #include <string>
+#include <functional>
 
 #include "compressor.h"
+#include "binary_heap.cpp"
 
 std::unordered_map<utility::Symbol, uint64_t> Compressor::GetSymbolFrequencies(const std::string& filename) {
     std::unordered_map<utility::Symbol, uint64_t> symbol_frequencies;
@@ -32,34 +34,35 @@ std::unordered_map<utility::Symbol, uint64_t> Compressor::GetSymbolFrequencies(c
 std::vector<std::pair<utility::Symbol, utility::Code>> Compressor::GetAnyHuffmanCode(
     std::unordered_map<utility::Symbol, uint64_t>& symbol_frequencies) {
 
-    auto comp = [](const std::pair<uint64_t, Trie::TrieVertex*>& left,
-                   const std::pair<uint64_t, Trie::TrieVertex*>& right) {
-        if (left.first != right.first) {
-            return left.first < right.first;  /// ordering by priority increasing
-        } else {
-            return left.second->value_ < right.second->value_;  /// ordering by minimal vertex in subtree
+    using T = std::pair<uint64_t, Trie::TrieVertex*>;
+    std::function<bool(const T&, const T&)> cmp = [](const T& left, const T& right) {
+        if (left.first != right.first) {  /// ordering by priority increasing
+            return left.first < right.first;
+        } else {  /// ordering by minimal vertex in subtree
+            return left.second->value_ < right.second->value_;
         }
     };
 
-    std::set<std::pair<uint64_t, Trie::TrieVertex*>, decltype(comp)> p_queue(comp);
+    BinaryHeap working_heap(cmp);
 
     for (auto& [symbol, frequency] : symbol_frequencies) {
         Trie::TrieVertex* cur_vertex = new Trie::TrieVertex(nullptr, nullptr, symbol);
-        p_queue.emplace(frequency, cur_vertex);
+        T new_element = std::make_pair(frequency, cur_vertex);
+        working_heap.Add(new_element);
     }
 
-    while (p_queue.size() > 1) {
-        auto [first_vertex_priority, first_vertex_pointer] = *p_queue.begin();
-        p_queue.erase(p_queue.begin());
-        auto [second_vertex_priority, second_vertex_pointer] = *p_queue.begin();
-        p_queue.erase(p_queue.begin());
+    while (working_heap.Size() > 1) {
+        auto [first_vertex_priority, first_vertex_pointer] = working_heap.GetBest();
+        working_heap.RemoveBest();
+        auto [second_vertex_priority, second_vertex_pointer] = working_heap.GetBest();
+        working_heap.RemoveBest();
         Trie::TrieVertex* new_vertex =
             new Trie::TrieVertex(first_vertex_pointer, second_vertex_pointer,
                                  std::min(first_vertex_pointer->value_, second_vertex_pointer->value_));
-        p_queue.emplace(first_vertex_priority + second_vertex_priority, new_vertex);
+        working_heap.Add(T(first_vertex_priority + second_vertex_priority, new_vertex));
     }
 
-    Trie cur_trie = Trie(p_queue.begin()->second);
+    Trie cur_trie = Trie(working_heap.GetBest().second);
 
     utility::Code temp_code = {};
     std::vector<std::pair<utility::Symbol, utility::Code>> result = {};
