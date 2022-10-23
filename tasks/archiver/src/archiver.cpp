@@ -6,9 +6,9 @@
 
 int main(int argc, char** argv) {
     OptionsParser working_parser;
-    working_parser.AddOption("compress", "archiver", "-c", "any", "any...");
-    working_parser.AddOption("decompress", "archiver", "-d", "any");
-    working_parser.AddOption("help", "archiver", "-h");
+    working_parser.AddOption("compress", "-c", "any", "any...");
+    working_parser.AddOption("decompress", "-d", "any");
+    working_parser.AddOption("help", "-h");
 
     std::string current_option = working_parser.FindOption(argc, argv);
 
